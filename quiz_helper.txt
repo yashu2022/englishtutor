@@ -1,0 +1,18 @@
+// Add this function before getIntelligentFallback
+function checkQuizAnswer(userAnswer) {
+    if (!state.currentQuiz) return null;
+    
+    const answer = userAnswer.toLowerCase().trim();
+    const correctAnswer = state.currentQuiz.correctAnswer.toLowerCase();
+    
+    // Check if answer matches (A, B, C or full answer)
+    const isCorrect = answer === correctAnswer || 
+                     answer === state.currentQuiz.correctLetter.toLowerCase() ||
+                     answer.includes(correctAnswer);
+    
+    return {
+        isCorrect,
+        correctAnswer: state.currentQuiz.correctAnswer,
+        explanation: state.currentQuiz.explanation
+    };
+}

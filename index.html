@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Tutor - Your AI Learning Companion 📚</title>
+    <meta name="description"
+        content="Smart Tutor - Interactive AI chatbot for English learning and General Knowledge with English Buddy and GK Genius">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Fredoka:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <!-- Welcome Screen -->
+    <div id="welcomeScreen" class="screen active">
+        <div class="welcome-header">
+            <div class="animated-greeting">
+                <h1 class="welcome-title">Welcome to Smart Tutor! 📚</h1>
+                <p class="welcome-subtitle">Your AI-powered learning companion</p>
+            </div>
+
+            <div class="daily-stats">
+                <div class="stat-card">
+                    <span class="stat-icon">🔥</span>
+                    <div class="stat-info">
+                        <span class="stat-value" id="streakCounter">0</span>
+                        <span class="stat-label">Day Streak</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-icon">⭐</span>
+                    <div class="stat-info">
+                        <span class="stat-value" id="totalPoints">0</span>
+                        <span class="stat-label">Points</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="daily-features">
+            <div class="daily-card word-of-day">
+                <h3>📖 Word of the Day</h3>
+                <div class="daily-content">
+                    <span class="daily-word" id="wordOfDay">Loading...</span>
+                    <span class="daily-definition" id="wordDefinition">...</span>
+                </div>
+            </div>
+            <div class="daily-card fact-of-day">
+                <h3>💡 Fact of the Day</h3>
+                <div class="daily-content">
+                    <span class="daily-fact" id="factOfDay">Loading...</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="bot-selection">
+            <h2 class="selection-title">Choose Your Tutor</h2>
+            <div class="bot-cards">
+                <div class="bot-card english-buddy" data-bot="english">
+                    <div class="bot-avatar">
+                        <span class="avatar-emoji">📖</span>
+                    </div>
+                    <h3 class="bot-name">English Buddy</h3>
+                    <p class="bot-description">Your friendly English language tutor</p>
+                    <div class="bot-features">
+                        <span class="feature-tag">Grammar</span>
+                        <span class="feature-tag">Vocabulary</span>
+                        <span class="feature-tag">Writing</span>
+                    </div>
+                    <button class="select-bot-btn">Start Learning</button>
+                </div>
+
+                <div class="bot-card gk-genius" data-bot="gk">
+                    <div class="bot-avatar">
+                        <span class="avatar-emoji">🌍</span>
+                    </div>
+                    <h3 class="bot-name">GK Genius</h3>
+                    <p class="bot-description">Your General Knowledge expert</p>
+                    <div class="bot-features">
+                        <span class="feature-tag">Science</span>
+                        <span class="feature-tag">History</span>
+                        <span class="feature-tag">Quizzes</span>
+                    </div>
+                    <button class="select-bot-btn">Explore Knowledge</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="recent-conversations" id="recentConversations">
+            <h3>Recent Conversations</h3>
+            <div class="conversation-list" id="conversationList">
+                <p class="no-conversations">No recent conversations yet. Start chatting!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mode Selection Screen -->
+    <div id="modeSelectionScreen" class="screen">
+        <div class="mode-header">
+            <button class="back-btn" id="backToWelcome">← Back</button>
+            <h2 class="mode-title" id="modeScreenTitle">Select Mode</h2>
+        </div>
+
+        <div class="mode-grid" id="modeGrid">
+            <!-- Modes will be dynamically inserted here -->
+        </div>
+    </div>
+
+    <!-- Chat Screen -->
+    <div id="chatScreen" class="screen">
+        <div class="chat-header">
+            <button class="back-btn" id="backToModes">← Back</button>
+            <div class="chat-bot-info">
+                <div class="chat-avatar" id="chatAvatar">📖</div>
+                <div class="chat-bot-details">
+                    <h3 class="chat-bot-name" id="chatBotName">English Buddy</h3>
+                    <p class="chat-mode-indicator" id="chatModeIndicator">Grammar Help</p>
+                </div>
+            </div>
+            <div class="chat-actions">
+                <button class="icon-btn" id="switchModeBtn" title="Switch Mode">🔄</button>
+                <button class="icon-btn" id="settingsBtn" title="Settings">⚙️</button>
+            </div>
+        </div>
+
+        <div class="chat-messages" id="chatMessages">
+            <!-- Messages will be dynamically inserted here -->
+        </div>
+
+        <div class="typing-indicator" id="typingIndicator">
+            <span class="typing-dot"></span>
+            <span class="typing-dot"></span>
+            <span class="typing-dot"></span>
+        </div>
+
+        <div class="quick-actions" id="quickActions">
+            <!-- Quick action buttons will be dynamically inserted based on mode -->
+        </div>
+
+        <div class="chat-input-container">
+            <button class="icon-btn voice-btn" id="voiceInputBtn" title="Voice Input">🎤</button>
+            <input type="text" id="chatInput" class="chat-input" placeholder="Type your message...">
+            <button class="send-btn" id="sendBtn">
+                <span class="send-icon">➤</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="modal">
+        <div class="modal-content settings-content">
+            <div class="modal-header">
+                <h2>Settings</h2>
+                <button class="close-modal" id="closeSettings">✕</button>
+            </div>
+            <div class="settings-body">
+                <div class="setting-group">
+                    <h3>Theme</h3>
+                    <div class="theme-options">
+                        <button class="theme-btn" data-theme="blue">Blue</button>
+                        <button class="theme-btn" data-theme="purple">Purple</button>
+                        <button class="theme-btn" data-theme="green">Green</button>
+                        <button class="theme-btn" data-theme="orange">Orange</button>
+                        <button class="theme-btn" data-theme="pink">Pink</button>
+                    </div>
+                </div>
+                <div class="setting-group">
+                    <h3>Chat Bubble Style</h3>
+                    <div class="bubble-options">
+                        <button class="bubble-btn" data-style="rounded">Rounded</button>
+                        <button class="bubble-btn" data-style="sharp">Sharp</button>
+                        <button class="bubble-btn" data-style="bubble">Bubble</button>
+                    </div>
+                </div>
+                <div class="setting-group">
+                    <h3>Font Size</h3>
+                    <input type="range" id="fontSizeSlider" min="12" max="20" value="16">
+                    <span id="fontSizeValue">16px</span>
+                </div>
+                <div class="setting-group">
+                    <h3>Sound Effects</h3>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="soundToggle" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="setting-group">
+                    <h3>Text-to-Speech</h3>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="ttsToggle">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Progress Modal -->
+    <div id="progressModal" class="modal">
+        <div class="modal-content progress-content">
+            <div class="modal-header">
+                <h2>Your Progress</h2>
+                <button class="close-modal" id="closeProgress">✕</button>
+            </div>
+            <div class="progress-body">
+                <div class="badges-section">
+                    <h3>Badges</h3>
+                    <div class="badges-grid" id="badgesGrid">
+                        <!-- Badges will be dynamically inserted -->
+                    </div>
+                </div>
+                <div class="stats-section">
+                    <h3>Statistics</h3>
+                    <div class="stats-grid" id="statsGrid">
+                        <!-- Stats will be dynamically inserted -->
+                    </div>
+                </div>
+                <div class="saved-content-section">
+                    <h3>Saved Content</h3>
+                    <div class="saved-tabs">
+                        <button class="tab-btn active" data-tab="words">Words</button>
+                        <button class="tab-btn" data-tab="facts">Facts</button>
+                        <button class="tab-btn" data-tab="stories">Stories</button>
+                        <button class="tab-btn" data-tab="quizzes">Quizzes</button>
+                    </div>
+                    <div class="saved-content" id="savedContent">
+                        <!-- Saved content will be dynamically inserted -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- API Key Modal -->
+    <div id="apiKeyModal" class="modal">
+        <div class="modal-content api-key-content">
+            <div class="modal-header">
+                <h2>🔑 Configure Gemini API</h2>
+                <button class="close-modal" id="closeApiKey">✕</button>
+            </div>
+            <div class="api-key-body">
+                <p class="api-key-description">
+                    To get the best AI-powered responses, please enter your Gemini API key.
+                    Don't have one? <a href="https://aistudio.google.com/app/apikey" target="_blank">Get it free
+                        here!</a>
+                </p>
+                <div class="api-key-input-group">
+                    <input type="text" id="apiKeyInput" class="api-key-input"
+                        placeholder="Enter your Gemini API key (AIza...)">
+                    <button class="api-key-save-btn" id="saveApiKey">Save & Continue</button>
+                </div>
+                <p class="api-key-note">
+                    <strong>Note:</strong> Your API key is stored locally in your browser and never sent anywhere except
+                    to Google's Gemini API.
+                </p>
+                <button class="api-key-skip-btn" id="skipApiKey">Skip - Use Basic Responses</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Achievement Toast -->
+
+    <div id="achievementToast" class="achievement-toast">
+        <div class="achievement-icon">🏆</div>
+        <div class="achievement-text">
+            <h4 id="achievementTitle">Achievement Unlocked!</h4>
+            <p id="achievementDescription">You earned a new badge!</p>
+        </div>
+    </div>
+
+    <!-- Floating Progress Button -->
+    <button class="floating-btn" id="progressBtn" title="View Progress">
+        <span class="progress-icon">🏆</span>
+    </button>
+
+    <!-- API Key Bar -->
+    <div id="apiKeyBar" class="api-key-bar">
+        <div class="api-bar-content">
+            <div class="api-status-info">
+                <span class="status-indicator" id="apiStatusIndicator"></span>
+                <span class="status-label" id="apiStatusLabel">AI: Not Configured</span>
+            </div>
+            <div class="api-input-wrap">
+                <input type="password" id="barApiKeyInput" placeholder="Enter Gemini Key (AIza...)">
+                <button id="saveBarApiKeyBtn">Save</button>
+            </div>
+        </div>
+        <button class="api-bar-toggle" id="toggleApiKeyBar" title="Configure API Key">🔑</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
